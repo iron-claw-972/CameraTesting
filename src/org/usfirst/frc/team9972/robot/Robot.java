@@ -16,7 +16,10 @@ import org.opencv.imgproc.Imgproc;
 public class Robot extends IterativeRobot {
 	
 //	Thread visionThread;
-	static CameraStreamingThread cst;
+	static FrontCameraStreamingThread frontCST;
+	static BackCameraStreamingThread backCST;
+	Thread frontCSThread = new Thread(frontCST);
+	Thread backCSThread = new Thread(backCST);
 //	static UsbCamera frontCam;
 //	static UsbCamera backCam;
 //	
@@ -24,7 +27,6 @@ public class Robot extends IterativeRobot {
 	static boolean rearCam = false;
 	static boolean switchCam = false;
 	
-//	
 //	static CvSink cvSink;
 //	static CvSource outputStream;
 //	
@@ -58,12 +60,11 @@ public class Robot extends IterativeRobot {
 //		visionThread.setDaemon(true);
 //		visionThread.start();
 		
-		cst = new CameraStreamingThread(this);
-		boolean done = CameraStreamingThread.init();
-		if (done) {
-			SmartDashboard.putBoolean("Run thread", true);
-			new Thread(cst).start();
-		}
+		frontCST = new FrontCameraStreamingThread(this);
+		backCST = new BackCameraStreamingThread(this);
+		FrontCameraStreamingThread.init();
+		BackCameraStreamingThread.init();
+		frontCSThread.start();
 	}
 
 	
@@ -71,8 +72,7 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		boolean buttonPressed = joystick.getRawButton(1);
 		if (buttonPressed && !pressedLastTime) {
-			rearCam = !rearCam;
-			switchCam = true;
+			backCSThread.start();
 		}
 		pressedLastTime = buttonPressed;
 	}
