@@ -34,7 +34,7 @@ public class FrontCameraStreamingThread implements Runnable {
 		this.r = r;
 	}
 
-	public static boolean init() {
+	public static void init() {
 		frontCam = CameraServer.getInstance().startAutomaticCapture(0);
 //		backCam = CameraServer.getInstance().startAutomaticCapture(1);
 		// Set the resolution
@@ -54,8 +54,6 @@ public class FrontCameraStreamingThread implements Runnable {
 		// deploying.
 
 		System.out.println("HELLO");
-
-		return true;
 	}
 
 	@Override

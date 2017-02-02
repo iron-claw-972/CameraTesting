@@ -18,8 +18,8 @@ public class Robot extends IterativeRobot {
 //	Thread visionThread;
 	static FrontCameraStreamingThread frontCST;
 	static BackCameraStreamingThread backCST;
-	Thread frontCSThread = new Thread(frontCST);
-	Thread backCSThread = new Thread(backCST);
+	Thread frontCSThread = new Thread();
+//	Thread backCSThread = new Thread(backCST); 
 //	static UsbCamera frontCam;
 //	static UsbCamera backCam;
 //	
@@ -61,9 +61,10 @@ public class Robot extends IterativeRobot {
 //		visionThread.start();
 		
 		frontCST = new FrontCameraStreamingThread(this);
-		backCST = new BackCameraStreamingThread(this);
+//		backCST = new BackCameraStreamingThread(this);
 		FrontCameraStreamingThread.init();
-		BackCameraStreamingThread.init();
+//		BackCameraStreamingThread.init();
+		frontCSThread = new Thread(frontCST);
 		frontCSThread.start();
 	}
 
@@ -72,7 +73,7 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		boolean buttonPressed = joystick.getRawButton(1);
 		if (buttonPressed && !pressedLastTime) {
-			backCSThread.start();
+//			backCSThread.start();
 		}
 		pressedLastTime = buttonPressed;
 	}
